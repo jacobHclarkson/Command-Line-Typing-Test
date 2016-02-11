@@ -9,7 +9,13 @@ import java.util.ArrayList;
 import java.util.Random;
 import java.util.Scanner;
 
-public class Prompt {
+// fancy library for grabbing key events
+import org.jnativehook.GlobalScreen;
+import org.jnativehook.NativeHookException;
+import org.jnativehook.keyboard.NativeKeyEvent;
+import org.jnativehook.keyboard.NativeKeyListener;
+
+public class Prompt implements NativeKeyListener {
 	String wordString = "";
 	String[] wordList;
 	String finalUserInput = "";
@@ -58,18 +64,42 @@ public class Prompt {
 	}
 
 	private void CaptureUserInput() {
-		long startTime = System.nanoTime();
-		Scanner input = new Scanner(System.in);
-		String capturedInput = input.nextLine();
-		input.close();
-		long endTime = System.nanoTime();
-		long timeElapsed = endTime - startTime;
-		double timeElapsedSeconds = timeElapsed / 1000000000.0;
-		timeTaken = timeElapsedSeconds;
-		finalUserInput = capturedInput;
+		//long startTime = System.nanoTime();
+		//Scanner input = new Scanner(System.in);
+		//String capturedInput = input.nextLine();
+		//input.close();
+		//long endTime = System.nanoTime();
+		//long timeElapsed = endTime - startTime;
+		//double timeElapsedSeconds = timeElapsed / 1000000000.0;
+		//timeTaken = timeElapsedSeconds;
+		//finalUserInput = capturedInput;
+
+
+		// new fancy shit
+		try {
+			GlobalScreen.registerNativeHook();
+		} catch (NativeHookException ex) {
+			System.out.println("Problem with native hook.");
+		}
+		GlobalScreen.addNativeKeyListener(new Prompt());
 	}
 
-	private void KeyPressed (int code) {
-		// do something with code?
+	// methods to get keys pressed
+	public void nativeKeyPressed(NativeKeyEvent e) {
+		System.out.println(NativeKeyEvent.getKeyText(e.getKeyCode()));
+		if (e.getKeyCode() == NativeKeyEvent.VC_ESCAPE) {
+			try {	
+				GlobalScreen.unregisterNativeHook();
+			} catch(Exception error){}
+		}
 	}
+	public void nativeKeyTyped(NativeKeyEvent e) {
+		System.out.println(NativeKeyEvent.getKeyText(e.getKeyCode()));
+	}
+	public void nativeKeyReleased(NativeKeyEvent e){}
+	
+
+
+
+
 }
