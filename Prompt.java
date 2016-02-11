@@ -7,10 +7,13 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Random;
+import java.util.Scanner;
 
 public class Prompt {
 	String wordString = "";
 	String[] wordList;
+	String finalUserInput = "";
+	double timeTaken = 0;
 
 	// ctor
 	public Prompt() {
@@ -35,14 +38,14 @@ public class Prompt {
 
 	private ArrayList<String> ChooseWords() {
 		ArrayList<String> chosenWords = new ArrayList<String>();
-		for(int i=0 ; i<10 ; i++)
+		Random rand = new Random();
+		for(int i=0 ; i<20 ; i++)
 		{
 			// randomly select some words from the word array
-			Random rand = new Random();
 			int max = wordList.length;
 			int min = 0;
-			int index = rand.nextInt((max - min) + 1) + min;
-			chosenWords.add(wordList[i]);
+			int index = rand.nextInt((max - min)) + min;
+			chosenWords.add(wordList[index]);
 		}
 		return chosenWords;
 	}
@@ -55,6 +58,18 @@ public class Prompt {
 	}
 
 	private void CaptureUserInput() {
-	
+		long startTime = System.nanoTime();
+		Scanner input = new Scanner(System.in);
+		String capturedInput = input.nextLine();
+		input.close();
+		long endTime = System.nanoTime();
+		long timeElapsed = endTime - startTime;
+		double timeElapsedSeconds = timeElapsed / 1000000000.0;
+		timeTaken = timeElapsedSeconds;
+		finalUserInput = capturedInput;
+	}
+
+	private void KeyPressed (int code) {
+		// do something with code?
 	}
 }
