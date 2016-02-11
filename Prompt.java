@@ -15,14 +15,24 @@ import org.jnativehook.NativeHookException;
 import org.jnativehook.keyboard.NativeKeyEvent;
 import org.jnativehook.keyboard.NativeKeyListener;
 
+// dealing with console polution
+import java.util.logging.Logger;
+import java.util.logging.Level;
+
 public class Prompt implements NativeKeyListener {
 	String wordString = "";
 	String[] wordList;
 	String finalUserInput = "";
 	double timeTaken = 0;
+	int backSpaces = 0;
 
 	// ctor
 	public Prompt() {
+		// squash native key console logging
+		Logger logger = Logger.getLogger(GlobalScreen.class.getPackage().getName());
+		logger.setLevel(Level.OFF);
+		logger.setUseParentHandlers(false);
+
 		// read string of words from file
 		try {
 			BufferedReader br = new BufferedReader(new FileReader("wordlist.txt"));
@@ -64,42 +74,39 @@ public class Prompt implements NativeKeyListener {
 	}
 
 	private void CaptureUserInput() {
-		//long startTime = System.nanoTime();
-		//Scanner input = new Scanner(System.in);
-		//String capturedInput = input.nextLine();
-		//input.close();
-		//long endTime = System.nanoTime();
-		//long timeElapsed = endTime - startTime;
-		//double timeElapsedSeconds = timeElapsed / 1000000000.0;
-		//timeTaken = timeElapsedSeconds;
-		//finalUserInput = capturedInput;
-
-
-		// new fancy shit
+		long startTime = System.nanoTime();
 		try {
 			GlobalScreen.registerNativeHook();
 		} catch (NativeHookException ex) {
 			System.out.println("Problem with native hook.");
 		}
-		GlobalScreen.addNativeKeyListener(new Prompt());
+		GlobalScreen.addNativeKeyListener(this);
+		Scanner input = new Scanner(System.in);
+		String capturedInput = input.nextLine();
+		input.close();
+		long endTime = System.nanoTime();
+		long timeElapsed = endTime - startTime;
+		double timeElapsedSeconds = timeElapsed / 1000000000.0;
+		timeTaken = timeElapsedSeconds;
+		finalUserInput = capturedInput;
+		System.out.println(backSpaces);
 	}
 
 	// methods to get keys pressed
 	public void nativeKeyPressed(NativeKeyEvent e) {
-		System.out.println(NativeKeyEvent.getKeyText(e.getKeyCode()));
-		if (e.getKeyCode() == NativeKeyEvent.VC_ESCAPE) {
+		if (e.getKeyCode() == NativeKeyEvent.VC_ENTER) {
 			try {	
 				GlobalScreen.unregisterNativeHook();
 			} catch(Exception error){}
 		}
+		
+		if(e.getKeyCode() == NativeKeyEvent.VC_BACKSPACE) {
+			// count the backspaces
+			backSpaces += 1;
+		}
+
 	}
-	public void nativeKeyTyped(NativeKeyEvent e) {
-		System.out.println(NativeKeyEvent.getKeyText(e.getKeyCode()));
-	}
+	// have to overload these but don't need them to do anything
+	public void nativeKeyTyped(NativeKeyEvent e) {}
 	public void nativeKeyReleased(NativeKeyEvent e){}
-	
-
-
-
-
 }
