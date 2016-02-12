@@ -25,6 +25,10 @@ public class Prompt implements NativeKeyListener {
 	String finalUserInput = "";
 	double timeTaken = 0;
 	int backSpaces = 0;
+	ArrayList<String> chosenWords = new ArrayList<String>();
+
+	// experiment
+	String inStream = "";
 
 	// ctor
 	public Prompt() {
@@ -53,7 +57,6 @@ public class Prompt implements NativeKeyListener {
 	}
 
 	private ArrayList<String> ChooseWords() {
-		ArrayList<String> chosenWords = new ArrayList<String>();
 		Random rand = new Random();
 		for(int i=0 ; i<20 ; i++)
 		{
@@ -89,7 +92,7 @@ public class Prompt implements NativeKeyListener {
 		double timeElapsedSeconds = timeElapsed / 1000000000.0;
 		timeTaken = timeElapsedSeconds;
 		finalUserInput = capturedInput;
-		System.out.println(backSpaces);
+		//System.out.println(backSpaces);
 	}
 
 	// methods to get keys pressed
@@ -103,10 +106,13 @@ public class Prompt implements NativeKeyListener {
 		if(e.getKeyCode() == NativeKeyEvent.VC_BACKSPACE) {
 			// count the backspaces
 			backSpaces += 1;
+			inStream = inStream + "<";
 		}
-
 	}
 	// have to overload these but don't need them to do anything
-	public void nativeKeyTyped(NativeKeyEvent e) {}
+	public void nativeKeyTyped(NativeKeyEvent e) {
+		//System.out.println(e.getKeyChar());
+		inStream = inStream + (e.getKeyChar());
+	}
 	public void nativeKeyReleased(NativeKeyEvent e){}
 }
