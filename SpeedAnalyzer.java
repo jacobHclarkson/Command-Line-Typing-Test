@@ -6,19 +6,22 @@ import java.lang.System;
 
 public class SpeedAnalyzer {
 	String userInput = "";
-	double typingSpeed = 0;
+	double grossTypingSpeed = 0;
+	double netTypingSpeed = 0;
 	double timeTaken = 0;
+	int errors = 0;
 
 	// ctor
-	public SpeedAnalyzer(String _userInput, double _timeTaken) {
+	public SpeedAnalyzer(String _userInput, double _timeTaken, int _errors) {
 		userInput = _userInput;
 		timeTaken = _timeTaken;
+		errors = _errors;
 	}
 	
 	// main speed analysis method
-	public double Analyze() {
-		typingSpeed = CalculateSpeed(CountWords(userInput), timeTaken);
-		return typingSpeed;
+	public void Analyze() {
+		grossTypingSpeed = CalculateSpeed(CountWords(userInput), timeTaken);
+		netTypingSpeed = grossTypingSpeed - (errors/(timeTaken/60));
 	}
 
 	// count how many words (where a word is defined as 5 characters) the user has entered

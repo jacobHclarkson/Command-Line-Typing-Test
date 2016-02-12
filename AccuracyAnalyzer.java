@@ -11,6 +11,7 @@ public class AccuracyAnalyzer {
 	String transcribed ="";
 	int [][] sMatrix;
 	int corrections = 0;
+	double C, INF, IF, accuracy;
 
 	// ctor
 	public AccuracyAnalyzer(ArrayList<String> _prompt, String _input, String _transcribed, int _corrections) {
@@ -29,17 +30,12 @@ public class AccuracyAnalyzer {
 	}
 
 	// main analysis method
-	public double Analyze() {
-		double C = (double)(Correct());
-		System.out.println ("correct: " + C);
-		double INF = (double)(IncorrectNotFixed());
-		System.out.println("incorrect not fixed: " + INF);
-		double IF = (double)(IncorrectFixed());
-		System.out.println("incorrect fixed: " + IF);
+	public void Analyze() {
+		C = (double)(Correct());
+		INF = (double)(IncorrectNotFixed());
+		IF = (double)(IncorrectFixed());
 		double totalErrorRate = ((INF + IF)/(C + INF + IF)) * 100;
-		System.out.println("total error rate: " + totalErrorRate);
-		double accuracy = 100 - totalErrorRate;
-		return accuracy;
+		accuracy = 100 - totalErrorRate;
 	}
 
 	// return number of correct keystrokes
