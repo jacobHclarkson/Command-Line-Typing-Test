@@ -29,6 +29,6 @@ public class Driver {
 		System.out.println("Overall Accuracy:   " + df.format(accAnalyzer.accuracy) + " %");
 		System.out.println();
 		System.out.println("Gross WPM:         " + df.format(sA.grossTypingSpeed) + " WPM");
-		System.out.println("Net WPM:           " + df.format(sA.netTypingSpeed) + "WPM");
+		System.out.println("Net WPM:           " + df.format(sA.netTypingSpeed) + " WPM");
 	}
 }
