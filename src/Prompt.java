@@ -8,6 +8,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Random;
 import java.util.Scanner;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 
 // fancy library for grabbing key events
 import org.jnativehook.GlobalScreen;
@@ -26,8 +28,6 @@ public class Prompt implements NativeKeyListener {
 	double timeTaken = 0;
 	int backSpaces = 0;
 	ArrayList<String> chosenWords = new ArrayList<String>();
-
-	// experiment
 	String inStream = "";
 
 	// ctor
@@ -39,9 +39,15 @@ public class Prompt implements NativeKeyListener {
 
 		// read string of words from file
 		try {
-			BufferedReader br = new BufferedReader(new FileReader("wordlist.txt"));
+			//BufferedReader br = new BufferedReader(new FileReader("wordlist.txt"));
+			//BufferedReader br = new BufferedReader(new InputStreamReader(in, "UTF-8"));
+			//wordString = br.readLine();
+			//br.close();
+			InputStream in = this.getClass().getClassLoader().getResourceAsStream("wordlist.txt");
+			BufferedReader br = new BufferedReader(new InputStreamReader(in, "UTF-8"));
 			wordString = br.readLine();
 			br.close();
+			in.close();
 		} catch (IOException e) {
 			System.out.println("Error retrieving word list from file.");
 		}
@@ -92,7 +98,6 @@ public class Prompt implements NativeKeyListener {
 		double timeElapsedSeconds = timeElapsed / 1000000000.0;
 		timeTaken = timeElapsedSeconds;
 		finalUserInput = capturedInput;
-		//System.out.println(backSpaces);
 	}
 
 	// methods to get keys pressed
