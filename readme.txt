@@ -3,7 +3,7 @@ README - Command Line Typing Test
 
 About
 -----
-A test to for typing speed and accuracy that runs in the terminal.
+A test for typing speed and accuracy that runs in the terminal.
 
 The program calculates typing accuracy using a combination of methods as described here: http://dl.acm.org/citation.cfm?id=642632
 
